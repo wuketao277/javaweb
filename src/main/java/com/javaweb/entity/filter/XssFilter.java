@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet Filter implementation class XssFilter
@@ -37,7 +38,12 @@ public class XssFilter implements Filter {
 
 		// pass the request along the filter chain
 		//将ServletRequest类实例request转换为XssHttpServletRequestWrapper类的实例
-		chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest)request), response);
+		XSSHttpServletRequest xhsRequest = new XSSHttpServletRequest((HttpServletRequest)request);
+		if(!xhsRequest.getCheckReferer())
+		{
+			((HttpServletResponse)response).sendRedirect("/javaweb");
+		}
+		chain.doFilter(xhsRequest, response);
 	}
 
 	/**
