@@ -9,10 +9,33 @@
 </head>
 <body>
 	<h1>新闻添加</h1>
+	<form id="form1" action="/javaweb/news/saveAdd" method="post">
+		<table>
+			<tr>
+				<td>新闻标题</td>
+				<td><input type="text" id="title" name="title" /></td>
+			</tr>
+			<tr>
+				<td>关键字</td>
+				<td><input type="text" id="keywords" name="keywords" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="提交" /></td>
+			</tr>
+		</table>
+	</form>
 	<hr />
 	<a href="${ctx}/news/view">新闻浏览</a>&nbsp;&nbsp;
 	<a href="${ctx}/news/add">新闻添加</a>&nbsp;&nbsp;
 	<a href="${ctx}/news/modify">新闻修改</a>&nbsp;&nbsp;
 	<a href="${ctx}/news/delete">新闻删除</a>&nbsp;&nbsp;
+
+	<script type="text/javascript">
+		function submitnews() {
+			var title = $('#title').val();
+			var keywords = $('#keywords').val();
+			document.getElementId('table1').submit();
+		}
+	</script>
 </body>
 </html>
