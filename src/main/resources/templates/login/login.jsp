@@ -4,9 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>登录页面</title>
 </head>
-<body>
-
+<body style="margin:0px; text-align:center;">
+<div style="width:400px;">
+	<form method="post" action="/javaweb/login/save">
+		用户名:<input type="text" name="_username"/><br/>
+		密码：<input type="password" name="_password"/><br/>
+		<input type="submit" value="登录"/>&nbsp;&nbsp;<input type="reset" value="重置"/>
+	</form>
+</div>
 </body>
 </html>

@@ -1,0 +1,115 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:task="http://www.springframework.org/schema/task" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="
+   http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context-4.0.xsd
+   http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/task  
+      http://www.springframework.org/schema/task/spring-task-3.0.xsd 
+   http://www.springframework.org/schema/tx 
+   http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+   ">
+
+	<!-- 组件自动扫描 -->
+	<context:component-scan base-package="com.javaweb" />
+	<!-- 注解配置 -->
+	<context:annotation-config />
+	<!-- 任务声明驱动 -->
+	<task:annotation-driven />
+
+	<!-- 配置权限管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- myRealm 是自定义的类 -->
+		<property name="realm" ref="myRealm" />
+	</bean>
+	
+	<!-- 配置shiro的过滤链 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- Shiro的核心安全接口,这个属性是必须的 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 要求登录时的链接 -->
+		<property name="loginUrl" value="/login/login" />
+		<!-- 登录成功后要跳转的连接 这个在登录成功方法中可以设置跳转位置 -->
+		<!-- <property name="successUrl" value="/system/main"/> -->
+		<!-- 未授权的跳转路径 -->
+		<property name="unauthorizedUrl" value="/login/login" />
+		<!-- 添加自定义角色过滤器 -->
+		<property name="filters">
+			<map>
+				<entry key="roleOrFilter" value-ref="customRolesAuthorizationFilter" />
+			</map>
+		</property>
+		<!-- Shiro连接约束配置,即过滤链的定义 -->
+		<property name="filterChainDefinitions">
+			<value>
+				<!-- 角色配置中使用自定义的授权过滤器roleOrFilter -->
+				<!-- NewsController下的浏览访问不要求用户登录 /news/view=anon -->
+				<!-- NewsController下的 增、删、改操作要求有admin权限 -->
+				/news/add=roleOrFilter[su,admin]
+				/news/delete=roleOrFilter[admin]
+				/news/modify=roleOrFilter[admin]
+				<!-- NewsController下的保存观点操作要求登录 -->
+				/news/saveopinion=authc
+			</value>
+		</property>
+	</bean>
+
+	<!-- 数据源 数据库连接池使用DBCP -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver">
+		</property>
+		<property name="url" value="jdbc:mysql://localhost:3306/test">
+		</property>
+		<property name="username" value="root"></property>
+		<property name="password" value="root"></property>
+		<!--maxActive: 最大连接数量 -->
+		<property name="maxActive" value="150" />
+		<!--minIdle: 最小空闲连接 -->
+		<property name="minIdle" value="5" />
+		<!--maxIdle: 最大空闲连接 -->
+		<property name="maxIdle" value="20" />
+		<!--initialSize: 初始化连接 -->
+		<property name="initialSize" value="30" />
+		<!-- 连接被泄露时是否打印 -->
+		<property name="logAbandoned" value="true" />
+		<!--removeAbandoned: 是否自动回收超时连接 -->
+		<property name="removeAbandoned" value="true" />
+		<!--removeAbandonedTimeout: 超时时间(以秒数为单位) -->
+		<property name="removeAbandonedTimeout" value="10" />
+		<!--maxWait: 超时等待时间以毫秒为单位 1000等于60秒 -->
+		<property name="maxWait" value="1000" />
+		<!-- 在空闲连接回收器线程运行期间休眠的时间值,以毫秒为单位. -->
+		<property name="timeBetweenEvictionRunsMillis" value="10000" />
+		<!-- 在每次空闲连接回收器线程(如果有)运行时检查的连接数量 -->
+		<property name="numTestsPerEvictionRun" value="10" />
+		<!-- 1000 * 60 * 30 连接在池中保持空闲而不被空闲连接回收器线程 -->
+		<property name="minEvictableIdleTimeMillis" value="10000" />
+
+	</bean>
+	<!-- 配置Mybatis -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- <property name="configLocation" value="/WEB-INF/classes/mybatis.xml" /> -->
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="/WEB-INF/classes/templates/mapper/*Mapper.xml" />
+	</bean>
+
+
+	<!-- <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" /> <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" /> -->
+
+
+	<!-- 声明式事务管理
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="sessionFactory" ref="sqlSessionFactory" />
+	</bean> -->
+	
+	<!-- transaction support-->
+<!-- PlatformTransactionMnager
+<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+</bean>
+
+<tx:annotation-driven transaction-manager="txManager" />
+ -->
+</beans>
