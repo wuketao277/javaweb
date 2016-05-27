@@ -7,18 +7,14 @@ import java.security.Principal;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.shiro.util.StringUtils;
 
 public class XSSHttpServletRequest implements HttpServletRequest {
 	private HttpServletRequest _request;
@@ -29,8 +25,9 @@ public class XSSHttpServletRequest implements HttpServletRequest {
 
 	public XSSHttpServletRequest(HttpServletRequest request) {
 		String uri = request.getRequestURL().toString();
-		//检测所有非初始页面的页面来源。如果页面来源不是当前网站，修改标志。
-		if (!"http://localhost:8080/javaweb/".equals(uri) && !"http://localhost:8080/javaweb".equals(uri)) {
+		// 检测所有非初始页面的页面来源。如果页面来源不是当前网站，修改标志。
+		if (!"http://localhost:8080/javaweb/".equals(uri) && !"http://localhost:8080/javaweb".equals(uri)
+				&& !"http://localhost:8080/javaweb/login/login".equals(uri)) {
 			String referer = request.getHeader("referer");
 			if ((null == referer) || (referer.indexOf("http://localhost:8080/javaweb") != 0)) {
 				checkReferer = false;
@@ -39,7 +36,7 @@ public class XSSHttpServletRequest implements HttpServletRequest {
 
 		this._request = request;
 	}
-	
+
 	public boolean getCheckReferer() {
 		return checkReferer;
 	}

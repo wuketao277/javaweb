@@ -1,6 +1,7 @@
 package com.javaweb.entity.filter;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,12 +16,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class XssFilter implements Filter {
 
-    /**
-     * Default constructor. 
-     */
-    public XssFilter() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public XssFilter() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see Filter#destroy()
@@ -32,16 +33,16 @@ public class XssFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
 
 		// pass the request along the filter chain
-		//将ServletRequest类实例request转换为XssHttpServletRequestWrapper类的实例
-		XSSHttpServletRequest xhsRequest = new XSSHttpServletRequest((HttpServletRequest)request);
-		if(!xhsRequest.getCheckReferer())
-		{
-			((HttpServletResponse)response).sendRedirect("/javaweb");
+		// 将ServletRequest类实例request转换为XssHttpServletRequestWrapper类的实例
+		XSSHttpServletRequest xhsRequest = new XSSHttpServletRequest((HttpServletRequest) request);
+		if (!xhsRequest.getCheckReferer()) {
+			((HttpServletResponse) response).sendRedirect("/javaweb/login/login");
 		}
 		chain.doFilter(xhsRequest, response);
 	}
