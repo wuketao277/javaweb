@@ -26,13 +26,19 @@ public class MyRealm extends AuthorizingRealm {
             //添加一个角色,不是配置意义上的添加,而是证明该用户拥有admin角色    
             simpleAuthorInfo.addRole("admin");  
             //添加权限  
-            simpleAuthorInfo.addStringPermission("city/list");  
-            System.out.println("已为用户[jadyer]赋予了[admin]角色和[admin:manage]权限");  
+            simpleAuthorInfo.addStringPermission("city/list");   
             return simpleAuthorInfo;  
-        }else if(null!=currentUsername && "wu".equals(currentUsername)){  
-            System.out.println("当前用户[wu]无授权");  
+        }
+      
+        //实际中可能会像上面注释的那样从数据库取得  
+        if(null!=currentUsername && "su".equals(currentUsername)){  
+            //添加一个角色,不是配置意义上的添加,而是证明该用户拥有admin角色    
+            simpleAuthorInfo.addRole("su");  
+            //添加权限  
+            simpleAuthorInfo.addStringPermission("city/list");   
             return simpleAuthorInfo;  
-        }  
+        }
+        
 
 		return null;
 	}
