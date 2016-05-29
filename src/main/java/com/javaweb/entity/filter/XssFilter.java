@@ -43,8 +43,9 @@ public class XssFilter implements Filter {
 		XSSHttpServletRequest xhsRequest = new XSSHttpServletRequest((HttpServletRequest) request);
 		if (!xhsRequest.getCheckReferer()) {
 			((HttpServletResponse) response).sendRedirect("/javaweb/login/login");
+		} else {
+			chain.doFilter(xhsRequest, response);
 		}
-		chain.doFilter(xhsRequest, response);
 	}
 
 	/**
