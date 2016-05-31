@@ -9,7 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>测试系统-<sitemesh:write property='title' /></title>
 <sitemesh:write property='head' />
-<script type="text/javascript" src="src/main/webapp/static/js/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="static/js/jquery-1.8.2.js"></script>
 </head>
 <body>
 	<div>
